@@ -14,13 +14,13 @@ module.exports = class USER {
 
   static findUser(user) {
     return db.execute(
-      "SELECT id, name, email, phno, password, role FROM users WHERE email = ?",
+      "SELECT id, name, email, phno, password, role FROM Users WHERE email = ?",
       [user.email]
     );
   }
   static findUserById(id) {
     return db.execute(
-      "SELECT id, name, email, phno, password, role FROM users WHERE id = ?",
+      "SELECT id, name, email, phno, password, role FROM Users WHERE id = ?",
       [id]
     );
   }
@@ -36,13 +36,13 @@ module.exports = class USER {
 
   static getAllStudents() {
     return db.execute(
-      "SELECT id, name, email, phno FROM users WHERE role = 'student'"
+      "SELECT id, name, email, phno FROM Users WHERE role = 'student'"
     );
   }
 
   static addUser(user) {
     return db.execute(
-      "INSERT INTO users(id, name, email, phno, password, role) VALUES (?,?,?,?,?,?)",
+      "INSERT INTO Users(id, name, email, phno, password, role) VALUES (?,?,?,?,?,?)",
       [user.id, user.name, user.email, user.phno, user.password, user.role]
     );
   }
