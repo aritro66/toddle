@@ -1,0 +1,757 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Documentation",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4001/",
+      "description": "Local server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "API for users in the system (teacher or student)"
+    },
+    {
+      "name": "Files",
+      "description": "API for files or attachments in the journal."
+    },
+    {
+      "name": "Tags",
+      "description": "Students who are tagged in the journal by teachers."
+    },
+    {
+      "name": "Auth",
+      "description": "API for authentication in the system"
+    },
+    {
+      "name": "Journal",
+      "description": "API for journal in the system"
+    }
+  ],
+  "paths": {
+    "/api-docs": {
+      "get": {
+        "summary": "Get API Documentation of Toddle Backend Assignment",
+        "description": "Get API Documentation of Toddle Backend Assignment",
+        "responses": {
+          "200": {
+            "description": "API Documentation"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/register": {
+      "post": {
+        "summary": "Register a new user",
+        "tags": ["Auth"],
+        "requestBody": {
+          "description": "User registration input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegistrationInput"
+              },
+              "example": {
+                "name": "John Doe",
+                "email": "john@example.com",
+                "phno": "1234567890",
+                "password": "secretpassword",
+                "role": "teacher"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully, response contains user details and JWT token"
+          },
+          "400": {
+            "description": "Bad request, validation error"
+          },
+          "409": {
+            "description": "User already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "summary": "Login user",
+        "tags": ["Auth"],
+        "requestBody": {
+          "description": "User login input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginInput"
+              },
+              "example": {
+                "email": "john@example.com",
+                "password": "secretpassword"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in successfully"
+          },
+          "400": {
+            "description": "Bad request, validation error"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "summary": "Logout user",
+        "tags": ["Auth"],
+        "parameters": [
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User logged out successfully"
+          },
+          "400": {
+            "description": "Bad request - Invalid or missing x-access-token header"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token or session expired"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/tag/{journal_id}": {
+      "get": {
+        "summary": "Get tagged students for a journal",
+        "tags": ["Tags"],
+        "parameters": [
+          {
+            "name": "journal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tagged students retrieved successfully"
+          },
+          "400": {
+            "description": "Bad request - Invalid or missing x-access-token header"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token or session expired"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/tag/create": {
+      "post": {
+        "summary": "Create a new tag",
+        "tags": ["Tags"],
+        "requestBody": {
+          "description": "Tag creation input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagCreateInput"
+              },
+              "example": {
+                "student_id": "student123",
+                "journal_id": "journal456"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Tag created successfully"
+          },
+          "400": {
+            "description": "Bad request - Invalid or missing x-access-token header"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token or session expired"
+          },
+          "403": {
+            "description": "Forbidden - User is not a teacher"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/tag/remove/{tag_id}": {
+      "delete": {
+        "summary": "Remove a tag by ID",
+        "tags": ["Tags"],
+        "parameters": [
+          {
+            "name": "tag_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tag removed successfully"
+          },
+          "400": {
+            "description": "Bad request - Invalid or missing x-access-token header"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token or session expired"
+          },
+          "403": {
+            "description": "Forbidden - User is not a teacher"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/journal/": {
+      "get": {
+        "summary": "Get journals",
+        "tags": ["Journal"],
+        "parameters": [
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Journals retrieved successfully"
+          },
+          "400": {
+            "description": "Bad request - Invalid or missing x-access-token header"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token or session expired"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/journal/create": {
+      "post": {
+        "summary": "Create a new journal",
+        "tags": ["Journal"],
+        "requestBody": {
+          "description": "Journal creation input",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "teacher_id": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "published_at": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "upload_file": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                },
+                "required": ["teacher_id", "description", "published_at"]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Journal created successfully"
+          },
+          "400": {
+            "description": "Bad request - Invalid or missing x-access-token header"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token or session expired"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/journal/update/{journal_id}": {
+      "patch": {
+        "summary": "Update a journal",
+        "tags": ["Journal"],
+        "parameters": [
+          {
+            "name": "journal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Journal update input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JournalUpdateInput"
+              },
+              "example": {
+                "description": "Updated description",
+                "published_at": "2023-08-19"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Journal updated successfully"
+          },
+          "400": {
+            "description": "Bad request - Invalid or missing x-access-token header"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token or session expired"
+          },
+          "404": {
+            "description": "Not found - Journal not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/journal/remove/{journal_id}": {
+      "delete": {
+        "summary": "Remove a journal by ID",
+        "tags": ["Journal"],
+        "parameters": [
+          {
+            "name": "journal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Journal removed successfully"
+          },
+          "400": {
+            "description": "Bad request - Invalid or missing x-access-token header"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token or session expired"
+          },
+          "404": {
+            "description": "Not found - Journal not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/files/{id}": {
+      "get": {
+        "summary": "Get a file by ID",
+        "tags": ["Files"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "File retrieved successfully"
+          },
+          "404": {
+            "description": "Not found - File not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/files/add": {
+      "post": {
+        "summary": "Add a file or attachment to a journal",
+        "tags": ["Files"],
+        "requestBody": {
+          "description": "File upload input",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "upload_file": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "journal_id": {
+                    "type": "string"
+                  }
+                },
+                "required": ["upload_file", "journal_id"]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "File uploaded successfully"
+          },
+          "400": {
+            "description": "Bad request - Invalid or missing x-access-token header"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token or session expired"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/files/update/{file_id}": {
+      "patch": {
+        "summary": "Update a file by ID (replace file)",
+        "tags": ["Files"],
+        "parameters": [
+          {
+            "name": "file_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "File update input",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "upload_file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": ["upload_file"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "File updated successfully"
+          },
+          "400": {
+            "description": "Bad request - Invalid or missing x-access-token header"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token or session expired"
+          },
+          "404": {
+            "description": "Not found - File not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/files/remove/{file_id}": {
+      "delete": {
+        "summary": "Delete a file by ID",
+        "tags": ["Files"],
+        "parameters": [
+          {
+            "name": "file_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "File deleted successfully"
+          },
+          "400": {
+            "description": "Bad request - Invalid or missing x-access-token header"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token or session expired"
+          },
+          "404": {
+            "description": "Not found - File not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/user/students/": {
+      "get": {
+        "summary": "Get a list of all students,(only for teachers)",
+        "tags": ["User"],
+        "parameters": [
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of students retrieved successfully"
+          },
+          "400": {
+            "description": "Bad request - Invalid or missing x-access-token header"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid token or session expired"
+          },
+          "404": {
+            "description": "Not found - No students available"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "UserRegistrationInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "john@example.com"
+          },
+          "phno": {
+            "type": "string",
+            "example": "1234567890"
+          },
+          "password": {
+            "type": "string",
+            "example": "secretpassword"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["teacher", "student"],
+            "example": "teacher"
+          }
+        },
+        "required": ["name", "email", "phno", "password", "role"]
+      },
+      "UserLoginInput": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "john@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "secretpassword"
+          }
+        },
+        "required": ["email", "password"]
+      },
+      "TagCreateInput": {
+        "type": "object",
+        "properties": {
+          "student_id": {
+            "type": "string",
+            "example": "60b9b0b9e4b0c9b0b9e4b0c9"
+          },
+          "journal_id": {
+            "type": "string",
+            "example": "60b9b0b9e4b0c9b0b9e4b0c9"
+          }
+        },
+        "required": ["student_id", "journal_id"]
+      },
+      "JournalUpdateInput": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "This is a journal"
+          },
+          "published_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2021-06-04 (YYYY-MM-DD)"
+          }
+        }
+      }
+    }
+  }
+}
