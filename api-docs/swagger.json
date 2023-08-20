@@ -304,7 +304,7 @@
     },
     "/api/v1/journal/create": {
       "post": {
-        "summary": "Create a new journal",
+        "summary": "Create a new journal (published_at format is 'YYYY-MM-DD')",
         "tags": ["Journal"],
         "requestBody": {
           "description": "Journal creation input",
@@ -370,7 +370,7 @@
     },
     "/api/v1/journal/update/{journal_id}": {
       "patch": {
-        "summary": "Update a journal",
+        "summary": "Update a journal (published_at format is 'YYYY-MM-DD')",
         "tags": ["Journal"],
         "parameters": [
           {
@@ -651,7 +651,7 @@
     "/api/v1/user/students/": {
       "get": {
         "summary": "Get a list of all students,(only for teachers)",
-        "tags": ["User"],
+        "tags": ["Users"],
         "parameters": [
           {
             "name": "x-access-token",

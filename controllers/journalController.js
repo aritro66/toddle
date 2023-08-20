@@ -38,7 +38,7 @@ const getJournal = catchAsyncError(async (req, res) => {
     const host = req.hostname;
     const port = process.env.PORT || 4001;
 
-    const baseUrl = `$https://toddle-yhlf.onrender.com`;
+    const baseUrl = process.env.BASEURL;
     if (chk[0].role !== "student" && chk[0].role !== "teacher") {
       return res.status(403).json("Invalid role!");
     }

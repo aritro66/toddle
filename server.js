@@ -28,7 +28,9 @@ app.use("/api/v1/journal/", journalRoute);
 app.use("/api/v1/tag/", tagRoute);
 app.use("/api/v1/files/", fileRoute);
 app.use("/api/v1/user/", userRoute);
-
+app.use((req, res, next) => {
+  res.redirect("/api-docs");
+});
 [
   User.createTable(),
   Journal.createTable(),
