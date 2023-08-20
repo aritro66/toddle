@@ -41,6 +41,10 @@ some screenshots of key functionalities:
 ![Screenshot 2](images/toddless2.png)
 ![Screenshot 4](images/toddless4.png)
 
+# ER Diagram
+
+![Screenshot 7](images/ErDiagram.jpg)
+
 # Deployment
 
 I have deployed the project on Render and used cloud mysql server (both are free tier, may experience slow performance). You can access the deployed project at Deployment Link.
