@@ -1,6 +1,6 @@
 # Introduction
 
-Hello! I'm **Aritro Ghosh**, and I'm excited to present my solution for the backend assignment. This microservice is designed to provide a secure and efficient journal management system with a focus on user authentication and authorization.
+Our Journal REST API provides a secure and intuitive interface for users, primarily teachers and students. Teachers can create, update, and delete journals, consisting of textual descriptions, tagged students, and various attachments like images, videos, URLs, and PDFs. Importantly, the API ensures the privacy and integrity of this data.
 
 # Technologies Used
 
@@ -41,9 +41,6 @@ some screenshots of key functionalities:
 ![Screenshot 2](images/toddless2.png)
 ![Screenshot 4](images/toddless4.png)
 
-# ER Diagram
-
-![Screenshot 7](images/ErDiagram.jpg)
 
 # Deployment
 
@@ -53,4 +50,4 @@ Link: https://toddle-yhlf.onrender.com
 
 # Conclusion
 
-This microservice provides a secure and user-friendly platform for managing classroom journals. It offers features like user authentication, teacher-exclusive journal creation and management, student feeds, and email notifications. The use of JWT ensures data security, and the documentation provided via Swagger makes API interactions intuitive.
+This service provides a secure and user-friendly platform for managing classroom journals. It offers features like user authentication, teacher-exclusive journal creation and management, student feeds, and email notifications. The use of JWT ensures data security, and the documentation provided via Swagger makes API interactions intuitive.
